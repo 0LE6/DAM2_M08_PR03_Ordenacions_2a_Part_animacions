@@ -23,7 +23,7 @@
                     <!-- Número de elementos -->
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <Label Content="Nº d'elements" Width="125"/>
-                        <xctk:IntegerUpDown Name="iudElements" Minimum="1" Maximum="100" Value="10" Increment="1" Width="130"/>
+                        <xctk:IntegerUpDown Name="iudElements" Minimum="1" Maximum="1000" Value="10" Increment="1" Width="130"/>
                     </StackPanel>
 
                     <!-- Grosor del borde -->
