@@ -198,10 +198,9 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
                 case "Selection sort":
                     SelectionSort();
                     break;
-                case "Merge sort":
-                    MergeSortWrapper();
+                case "Cocktail sort":
+                    CocktailShakerSort();
                     break;
-
                 case "Quick sort":
                     QuickSortWrapper();
                     break;
@@ -460,26 +459,6 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
                 }
             }
         }
-
-        //private void InsertionSort()
-        //{
-        //    int n = elementos.Length;
-        //    for (int i = 1; i < n; i++)
-        //    {
-        //        int key = elementos[i];
-        //        int j = i - 1;
-
-        //        while (j >= 0 && elementos[j] > key)
-        //        {
-        //            elementos[j + 1] = elementos[j];
-        //            IntercambiarFiguras(j, j + 1);
-        //            j = j - 1;
-        //        }
-        //        elementos[j + 1] = key;
-        //    }
-        //}
-
-        // Deprecated
         private void CountingSort()
         {
             int RANGE = elementos.Max() + 1; // Asegúrate de que el rango cubra todos los valores posibles
@@ -602,78 +581,54 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
         }
         #endregion
 
-        #region algoritmo merge sort
+        #region algoritmo cocktail sort
 
-        private void MergeSortWrapper()
+        private void CocktailShakerSort()
         {
-            MergeSort(0, elementos.Length - 1);
-        }
+            bool swapped = true;
+            int start = 0;
+            int end = elementos.Length;
 
-        private void MergeSort(int left, int right)
-        {
-            if (left < right)
+            while (swapped)
             {
-                // Encuentra el punto medio del vector.
-                int middle = left + (right - left) / 2;
+                // Reseteamos el flag swapped a false, ya que podría ser true desde la iteración anterior.
+                swapped = false;
 
-                // Llama a la función recursiva para las mitades.
-                MergeSort(left, middle);
-                MergeSort(middle + 1, right);
-
-                // Une las mitades.
-                Merge(left, middle, right);
-            }
-        }
-
-        private void Merge(int left, int middle, int right)
-        {
-            int[] leftArray = new int[middle - left + 1];
-            int[] rightArray = new int[right - middle];
-
-            Array.Copy(elementos, left, leftArray, 0, leftArray.Length);
-            Array.Copy(elementos, middle + 1, rightArray, 0, rightArray.Length);
-
-            int i = 0;
-            int j = 0;
-            int k = left;
-
-            while (i < leftArray.Length && j < rightArray.Length)
-            {
-                if (leftArray[i] <= rightArray[j])
+                // Loop de izquierda a derecha igual que el Bubble Sort
+                for (int i = start; i < end - 1; ++i)
                 {
-                    elementos[k] = leftArray[i];
-                    i++;
+                    if (elementos[i] > elementos[i + 1])
+                    {
+                        IntercambiarFiguras(i, i + 1);
+                        swapped = true;
+                    }
                 }
-                else
+
+                // Si no se movió nada, entonces el array está ordenado.
+                if (!swapped)
+                    break;
+
+                // De lo contrario, necesitamos resetear el flag swapped para la siguiente iteración
+                swapped = false;
+
+                // Mueve el punto final atrás por uno, ya que el elemento en el final está en su lugar
+                end = end - 1;
+
+                // Loop de derecha a izquierda, haciendo lo mismo que el loop de izquierda a derecha
+                for (int i = end - 1; i >= start; i--)
                 {
-                    elementos[k] = rightArray[j];
-                    j++;
+                    if (elementos[i] > elementos[i + 1])
+                    {
+                        IntercambiarFiguras(i, i + 1);
+                        swapped = true;
+                    }
                 }
-                // Actualiza la UI aquí si es necesario
-                // Por ejemplo, podrías necesitar redibujar el elemento en 'k'
-                k++;
-            }
 
-            // Copiar el resto de elementos de leftArray, si hay
-            while (i < leftArray.Length)
-            {
-                elementos[k] = leftArray[i];
-                i++;
-                k++;
+                // Incrementa el punto inicial, ya que el último elemento de la iteración anterior está en su lugar
+                start = start + 1;
             }
-
-            // Copiar el resto de elementos de rightArray, si hay
-            while (j < rightArray.Length)
-            {
-                elementos[k] = rightArray[j];
-                j++;
-                k++;
-            }
-
-            // Este es un punto donde podrías necesitar actualizar la UI para reflejar la fusión
-            // pero dado que MergeSort no intercambia elementos de la misma manera que otros algoritmos,
-            // es posible que necesites una lógica adicional aquí para visualizar correctamente el proceso.
         }
+
 
         #endregion
 

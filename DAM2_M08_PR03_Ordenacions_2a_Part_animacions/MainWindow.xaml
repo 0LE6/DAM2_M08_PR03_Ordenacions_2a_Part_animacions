@@ -73,7 +73,7 @@
                     <ComboBox Name="cbOrdenacion" SelectedIndex="0">
                         <ComboBoxItem Content="Bubble sort"/>
                         <ComboBoxItem Content="Selection sort"/>
-                        <ComboBoxItem Content="Merge sort"/>
+                        <ComboBoxItem Content="Cocktail sort"/>
                         <ComboBoxItem Content="Quick sort"/>
                         <ComboBoxItem Content="Heap sort"/>
                         <!-- Añadir más opciones si es necesario -->
