@@ -223,24 +223,36 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
             }
         }
 
+        // seelccionamos y pasamos el tipo de easing function
         private IEasingFunction GetEasingFunction(string easingFunctionName)
         {
-            switch (easingFunctionName)
+            IEasingFunction easingFunction = null;
+
+            if (easingFunctionName == "EaseInOut")
             {
-                case "EaseInOut":
-                    return new PowerEase { EasingMode = EasingMode.EaseInOut };
-                case "EaseIn":
-                    return new PowerEase { EasingMode = EasingMode.EaseIn };
-                case "EaseOut":
-                    return new PowerEase { EasingMode = EasingMode.EaseOut };
-                case "Lineal":
-                    return null; // ya por defecto lo es
-                case "BounceEase":
-                    return new BounceEase();
-                default:
-                    return null; 
+                easingFunction = new PowerEase { EasingMode = EasingMode.EaseInOut };
             }
+            else if (easingFunctionName == "EaseIn")
+            {
+                easingFunction = new PowerEase { EasingMode = EasingMode.EaseIn };
+            }
+            else if (easingFunctionName == "EaseOut")
+            {
+                easingFunction = new PowerEase { EasingMode = EasingMode.EaseOut };
+            }
+            else if (easingFunctionName == "Lineal")
+            {
+                // null porque la lineal es by de FOL
+                easingFunction = null;
+            }
+            else if (easingFunctionName == "BounceEase")
+            {
+                easingFunction = new BounceEase();
+            }
+
+            return easingFunction;
         }
+
 
         private void IntercambiarFiguras(int index1, int index2)
         {
