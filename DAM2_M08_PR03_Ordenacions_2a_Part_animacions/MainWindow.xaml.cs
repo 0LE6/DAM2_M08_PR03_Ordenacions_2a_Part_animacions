@@ -213,8 +213,6 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
 
         private void IntercambiarFiguras(int index1, int index2)
         {
-
-            // Obtiene las figuras por su índice
             DependencyProperty propDeLaAnimacion;
             var tipoDeAnimacion = cbTipusAnimacio.Text;
 
@@ -222,12 +220,13 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
             var figura1 = cvCanvas.Children[index1] as Shape;
             var figura2 = cvCanvas.Children[index2] as Shape;
 
-            // Calcula las nuevas posiciones basadas en el ancho del canvas y el número de elementos
+            // calculamos las nuevas posiciones basadas en el ancho del canvas y el número de elementos
             var nuevaPosX1 = index2 * (cvCanvas.ActualWidth / elementos.Length);
             var nuevaPosX2 = index1 * (cvCanvas.ActualWidth / elementos.Length);
             double posicion1;
             double posicion2;
 
+            // para que la animacion sea vertical o de lado
             if (tipoDeAnimacion == "Vertical")
             {
                 posicion1 = Canvas.GetTop(cvCanvas.Children[index1]);
@@ -259,6 +258,7 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
                 FillBehavior = FillBehavior.Stop
             };            
             
+            // reciclado del anterior codigo
             CambiarColorFiguraTemporal(index1);
             CambiarColorFiguraTemporal(index2);
 
@@ -268,21 +268,23 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
                 Canvas.SetZIndex(cvCanvas.Children[index2], 0);
             };
 
+            // ejecutamos la animacion
             cvCanvas.Children[index1].BeginAnimation(propDeLaAnimacion, animacion1);
             cvCanvas.Children[index2].BeginAnimation(propDeLaAnimacion, animacion2);
 
+            // para que no se vaya de madres
             Canvas.SetZIndex(cvCanvas.Children[index1], 1);
             Canvas.SetZIndex(cvCanvas.Children[index2], 1);
 
             // lo que me dijo Xevi, el delay antes de actualizar
             Retraso(delay);
 
-            // Intercambia los elementos en el arreglo 'elementos'
+            // intercambiamois los elementos en el arry 'elementos'
             int temp = elementos[index1];
             elementos[index1] = elementos[index2];
             elementos[index2] = temp;
 
-            // Restablece los colores originales y actualiza la altura si es necesario
+            // Restablecemos los colores originales y actualiza la altura 
             ActualizarColorFigura(index1);
             ActualizarColorFigura(index2);
             ActualizarAlturaFigura(index1, elementos[index1]);
