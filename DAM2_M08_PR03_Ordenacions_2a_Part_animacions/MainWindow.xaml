@@ -4,9 +4,188 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DAM2_M08_PR03_Ordenacions_2a_Part_animacions"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Ordenació Visual" Height="670" Width="920">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
 
+        <Expander Header="Configuració" IsExpanded="True" Grid.Column="0" >
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Border Background="Orange" Padding="3" Margin="0,5,2,5">
+                        <Label Content="General" Foreground="White"/>
+                    </Border>
+                    <!-- Número de elementos -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Label Content="Nº d'elements" Width="125"/>
+                        <xctk:IntegerUpDown Name="iudElements" Minimum="1" Maximum="100" Value="10" Increment="1" Width="130"/>
+                    </StackPanel>
+
+                    <!-- Grosor del borde -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Label Content="Gruix del marc" Width="125"/>
+                        <xctk:IntegerUpDown Name="iudGrosor" Minimum="0" Maximum="10" Value="0" Increment="1" Width="130"/>
+                    </StackPanel>
+
+                    <!-- Radio de las columnas -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Label Content="Radi de les columnes" Width="125"/>
+                        <xctk:IntegerUpDown Name="iudRadi" Minimum="0" Maximum="50" Value="5" Increment="1" Width="130"/>
+                    </StackPanel>
+
+                    <!-- Tiempo de pausa -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Label Content="Temps Pausa" Width="125"/>
+                        <xctk:IntegerUpDown Name="iudPausa" Minimum="0" Maximum="1000" Value="500" Increment="1" Width="130"/>
+                    </StackPanel>
+
+                    <!-- Marca Intercanvis -->
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <Label Content="Desmarca Intercanvis"/>
+                        <CheckBox Name="checkColorSiONo" 
+                                Checked="CheckColorSiONo_Checked"
+                                Unchecked="CheckColorSiONo_Unchecked"/>
+                    </StackPanel>
+
+
+                    <!--<ComboBox Name="cbColorIntercambios">
+                    <CheckBox Name="checkColorSiONo" Content="Aleatori" Checked="checkColorSiONo_Checked"/>
+                    -->
+                    <!--<ComboBoxItem Content="Si"/>
+                    <ComboBoxItem Content="No"/>-->
+                    <!--
+                </ComboBox>-->
+
+                    <!-- Tipos de figuras -->
+                    <Label Content="Tipus de figures"/>
+                    <ComboBox Name="cbFiguras" SelectedIndex="0">
+                        <ComboBoxItem Content="Barras"/>
+                        <ComboBoxItem Content="Círculos"/>
+                    </ComboBox>
+
+                    <!-- Tipos de ordenación -->
+                    <Label Content="Tipus d'ordenació"/>
+                    <ComboBox Name="cbOrdenacion" SelectedIndex="0">
+                        <ComboBoxItem Content="Bubble sort"/>
+                        <ComboBoxItem Content="Selection sort"/>
+                        <ComboBoxItem Content="Insertion sort"/>
+                        <ComboBoxItem Content="Counting sort (NO FUNCIONA)"/>
+                        <!-- Añadir más opciones si es necesario -->
+                    </ComboBox>
+
+                    <!-- Disposición inicial -->
+                    <Border Background="Orange" Padding="3" Margin="0,5,0,5">
+                        <Label Content="Disposició inicial" Foreground="White"/>
+                    </Border>
+                    <CheckBox Name="checkInvertit" Content="Invertit" Checked="CheckBox_Checked"/>
+                    <CheckBox Name="checkAleatori" Content="Aleatori" Checked="CheckBox_Checked"/>
+
+                    <!-- Animació -->
+                    <Border Background="Orange" Padding="3" Margin="0,5,0,5">
+                        <Label Content="Animació" Foreground="White"/>
+                    </Border>
+                    <StackPanel Orientation="Vertical">
+                        <!-- Tipus d'animació -->
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Label Content="Tipus d'animació" Width="125"/>
+                            <ComboBox Name="cbTipusAnimacio" Width="130">
+                                <ComboBoxItem Content="Desplaçaments"/>
+                                <ComboBoxItem Content="Un altre tipus"/>
+                                <!-- Añade más tipos si es necesario -->
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Funció d'Easing -->
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Label Content="Funció d'Easing" Width="125"/>
+                            <ComboBox Name="cbFuncioEasing" Width="130">
+                                <ComboBoxItem Content="EaseInOut"/>
+                                <ComboBoxItem Content="EaseIn"/>
+                                <ComboBoxItem Content="EaseOut"/>
+                                <ComboBoxItem Content="Lineal"/>
+                                <!-- Añade más funciones si es necesario -->
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Easing Mode -->
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Label Content="Easing Mode" Width="125"/>
+                            <ComboBox Name="cbEasingMode" Width="130">
+                                <ComboBoxItem Content="EaseInOut"/>
+                                <ComboBoxItem Content="EaseIn"/>
+                                <ComboBoxItem Content="EaseOut"/>
+                                <ComboBoxItem Content="Lineal"/>
+                                <!-- Añade más modos si es necesario -->
+                            </ComboBox>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Colores -->
+                    <Border Background="Orange" Padding="3" Margin="0,5,0,5">
+                        <Label Content="Colors" Foreground="White" />
+                    </Border>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Label Content="Correcte" Width="120"/>
+                            <xctk:ColorPicker Name="colorCorrecte" Width="130"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Label Content="Incorrecte" Width="120"/>
+                            <xctk:ColorPicker Name="colorIncorrecter" Width="130"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Label Content="Intercanviar" Width="120"/>
+                            <xctk:ColorPicker Name="colorIntercanvi" Width="130"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Label Content="Fons" Width="120"/>
+                            <xctk:ColorPicker Name="colorFons" Width="130"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Brillo del marc -->
+                    <!--<Label Content="Brillo del marc ????"/>                    
+                <Slider Minimum="-10" Maximum="10" Value="1" TickFrequency="1" IsSnapToTickEnabled="True"/>-->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Name="btnOrdenar" Click="btnOrdenar_Click" FontSize="20" Content="Ordenar" Background="Orange" Foreground="White"  Padding="5" Margin="10" />
+                        <Button Name="btnPosicionar" Click="btnPosicionar_Click"  FontSize="20" Content="Posicionar" Background="Orange" Foreground="White" Margin="10" />
+                    </StackPanel>
+                    <Grid HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image gif:ImageBehavior.AnimatedSource="images/dance1.gif" Width="50" Height="50" Margin="-40,0,40,0"/>
+                        <!--<Image Grid.Column="0" Source="/images/dance1.gif" Width="30" Height="30" />-->
+
+                        <Button Grid.Column="1" Name="btnMute" Content="Mute" Click="btnMute_Click" HorizontalAlignment="Center" Width="50" Height="50"/>
+
+                        <Image Grid.Column="2" gif:ImageBehavior.AnimatedSource="images/dance1.gif" Width="50" Height="50" Margin="58,0,-58,0">
+                            <Image.RenderTransform>
+                                <ScaleTransform ScaleX="-1" CenterX="15"/>
+                            </Image.RenderTransform>
+                        </Image>
+                    </Grid>
+
+
+
+                </StackPanel>
+            </ScrollViewer>
+        </Expander>
+
+        <Border Grid.Column="1" >
+            <Viewbox>
+                <Canvas Name="cvCanvas" Width="1000" 
+                    Height="1000" Background="LightGray">
+                </Canvas>
+            </Viewbox>
+        </Border>
     </Grid>
 </Window>
