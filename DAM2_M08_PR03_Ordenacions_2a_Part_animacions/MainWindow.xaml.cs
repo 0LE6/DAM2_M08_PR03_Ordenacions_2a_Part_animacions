@@ -231,7 +231,7 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
         }
 
         // seelccionamos y pasamos el tipo de easing function
-        private IEasingFunction GetEasingFunction(string easingFunctionName)
+        private IEasingFunction FuncionConseguirEasing(string easingFunctionName)
         {
             IEasingFunction easingFunction = null;
 
@@ -292,14 +292,13 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
                 propDeLaAnimacion = Canvas.LeftProperty;
             }
 
-
             // Prepara las animaciones
             DoubleAnimation animacion1 = new DoubleAnimation
             {
                 From = primeraPosicion,
                 To = nuevaPosision1,
                 Duration = TimeSpan.FromMilliseconds(delay),
-                EasingFunction = GetEasingFunction(nombreDeLaFuncionEasingSeleccionada),
+                EasingFunction = FuncionConseguirEasing(nombreDeLaFuncionEasingSeleccionada),
                 FillBehavior = FillBehavior.Stop
             };
 
@@ -308,7 +307,7 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
                 From = segundaPosicion,
                 To = nuevaPosicion2,
                 Duration = TimeSpan.FromMilliseconds(delay),
-                EasingFunction = GetEasingFunction(nombreDeLaFuncionEasingSeleccionada),
+                EasingFunction = FuncionConseguirEasing(nombreDeLaFuncionEasingSeleccionada),
                 FillBehavior = FillBehavior.Stop
             };            
             
