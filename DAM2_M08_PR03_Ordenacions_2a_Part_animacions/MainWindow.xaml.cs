@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -207,31 +208,56 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
 
         private void IntercambiarFiguras(int index1, int index2)
         {
-            // aqui cambiamos los colorines de las 2 figuritas que se intercambian
-            CambiarColorFiguraTemporal(index1);
-            CambiarColorFiguraTemporal(index2);
+            // Asegúrate de que los índices son válidos
+            if (index1 < 0 || index1 >= cvCanvas.Children.Count || index2 < 0 || index2 >= cvCanvas.Children.Count) return;
 
-            // Intercambiar valores en el array de elementos
-            int temp = elementos[index1];
-            elementos[index1] = elementos[index2];
-            elementos[index2] = temp;
+            // Obtiene las figuras por su índice
+            var figura1 = cvCanvas.Children[index1] as Shape;
+            var figura2 = cvCanvas.Children[index2] as Shape;
 
+            // Calcula las nuevas posiciones basadas en el ancho del canvas y el número de elementos
+            double nuevaPosX1 = index2 * (cvCanvas.ActualWidth / elementos.Length);
+            double nuevaPosX2 = index1 * (cvCanvas.ActualWidth / elementos.Length);
 
+            // Prepara las animaciones
+            DoubleAnimation animacion1 = new DoubleAnimation
+            {
+                To = nuevaPosX2,
+                Duration = TimeSpan.FromMilliseconds(2)
+            };
 
-            // Cambiar las alturas de las figuras en lugar de intercambiarlas
-            ActualizarAlturaFigura(index1, elementos[index1]);
-            ActualizarAlturaFigura(index2, elementos[index2]);
+            DoubleAnimation animacion2 = new DoubleAnimation
+            {
+                To = nuevaPosX1,
+                Duration = TimeSpan.FromMilliseconds(2)
+            };
 
-            // en las animaciones el delay antes de la actualizacion de la altura de las figuras
-            // A CAMBIAR PARA PA PR 2
+            // Cambia los colores de las figuras a scbIntercambio antes de iniciar la animación
+            if (figura1 != null && figura2 != null)
+            {
+                figura1.Fill = scbIntercambio;
+                figura2.Fill = scbIntercambio;
 
-            // Aplicar un breve retraso
-            Retraso(delay);
+                // Inicia las animaciones
+                figura1.BeginAnimation(Canvas.LeftProperty, animacion1);
+                figura2.BeginAnimation(Canvas.LeftProperty, animacion2);
 
-            // Restaurar el color original de las figuras después del retraso
-            ActualizarColorFigura(index1);
-            ActualizarColorFigura(index2);
+                // Espera a que la animación termine
+                Retraso(delay);
+
+                // Intercambia los elementos en el arreglo 'elementos'
+                int temp = elementos[index1];
+                elementos[index1] = elementos[index2];
+                elementos[index2] = temp;
+
+                // Restablece los colores originales y actualiza la altura si es necesario
+                ActualizarColorFigura(index1);
+                ActualizarColorFigura(index2);
+                ActualizarAlturaFigura(index1, elementos[index1]);
+                ActualizarAlturaFigura(index2, elementos[index2]);
+            }
         }
+
 
         private void CambiarColorFiguraTemporal(int index)
         {
