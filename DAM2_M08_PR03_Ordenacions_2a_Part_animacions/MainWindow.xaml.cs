@@ -144,7 +144,8 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
 
         private void iudPausa_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            delay = (int)e.NewValue; // actualizamos el delay segun lo que haga el usuario
+            delay = (int)e.NewValue == 0 ? 1 : (int)e.NewValue; // actualizamos el delay segun lo que haga el usuario
+            // ternario porque si no petaba con el maldito 0
         }
 
         // Método auxiliar para controlar los checked y unchecked entre los 2 checkbox
@@ -197,11 +198,12 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
                 case "Selection sort":
                     SelectionSort();
                     break;
-                case "Insertion sort":
-                    //InsertionSort();
+                case "Merge sort":
+                    MergeSortWrapper();
                     break;
-                case "Counting sort":
-                    CountingSort();
+
+                case "Quick sort":
+                    QuickSortWrapper();
                     break;
                 case "Heap sort":
                     HeapSort();
@@ -518,6 +520,7 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
             }
         }
 
+        # region algoritmo heap sort
         private void HeapSort()
         {
             int n = elementos.Length;
@@ -560,6 +563,119 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
             }
         }
 
+        #endregion
+
+        #region algoritmo quick sort
+        private void QuickSortWrapper()
+        {
+            QuickSort(0, elementos.Length - 1);
+        }
+
+        private void QuickSort(int low, int high)
+        {
+            if (low < high)
+            {
+                int pi = Partition(low, high);
+
+                QuickSort(low, pi - 1);
+                QuickSort(pi + 1, high);
+            }
+        }
+                
+        private int Partition(int low, int high)
+        {
+            int pivot = elementos[high];
+            int i = (low - 1);
+
+            for (int j = low; j < high; j++)
+            {
+                if (elementos[j] < pivot)
+                {
+                    i++;
+                    // Intercambiar elementos[i] y elementos[j]
+                    IntercambiarFiguras(i, j);
+                }
+            }
+            // Intercambiar elementos[i+1] y elementos[high] (o pivot)
+            IntercambiarFiguras(i + 1, high);
+            return i + 1;
+        }
+        #endregion
+
+        #region algoritmo merge sort
+
+        private void MergeSortWrapper()
+        {
+            MergeSort(0, elementos.Length - 1);
+        }
+
+        private void MergeSort(int left, int right)
+        {
+            if (left < right)
+            {
+                // Encuentra el punto medio del vector.
+                int middle = left + (right - left) / 2;
+
+                // Llama a la función recursiva para las mitades.
+                MergeSort(left, middle);
+                MergeSort(middle + 1, right);
+
+                // Une las mitades.
+                Merge(left, middle, right);
+            }
+        }
+
+        private void Merge(int left, int middle, int right)
+        {
+            int[] leftArray = new int[middle - left + 1];
+            int[] rightArray = new int[right - middle];
+
+            Array.Copy(elementos, left, leftArray, 0, leftArray.Length);
+            Array.Copy(elementos, middle + 1, rightArray, 0, rightArray.Length);
+
+            int i = 0;
+            int j = 0;
+            int k = left;
+
+            while (i < leftArray.Length && j < rightArray.Length)
+            {
+                if (leftArray[i] <= rightArray[j])
+                {
+                    elementos[k] = leftArray[i];
+                    i++;
+                }
+                else
+                {
+                    elementos[k] = rightArray[j];
+                    j++;
+                }
+                // Actualiza la UI aquí si es necesario
+                // Por ejemplo, podrías necesitar redibujar el elemento en 'k'
+                k++;
+            }
+
+            // Copiar el resto de elementos de leftArray, si hay
+            while (i < leftArray.Length)
+            {
+                elementos[k] = leftArray[i];
+                i++;
+                k++;
+            }
+
+            // Copiar el resto de elementos de rightArray, si hay
+            while (j < rightArray.Length)
+            {
+                elementos[k] = rightArray[j];
+                j++;
+                k++;
+            }
+
+            // Este es un punto donde podrías necesitar actualizar la UI para reflejar la fusión
+            // pero dado que MergeSort no intercambia elementos de la misma manera que otros algoritmos,
+            // es posible que necesites una lógica adicional aquí para visualizar correctamente el proceso.
+        }
+
+        #endregion
 
         ////////////////////// MUSIC ///////////////////////// 
 
