@@ -46,7 +46,7 @@
 
                     <!-- Marca Intercanvis -->
                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                        <Label Content="Desmarca Intercanvis"/>
+                        <Label Content="Desmarcar Color Intercanvis"/>
                         <CheckBox Name="checkColorSiONo" 
                                 Checked="CheckColorSiONo_Checked"
                                 Unchecked="CheckColorSiONo_Unchecked"/>
