@@ -9,10 +9,14 @@
 
   <ItemGroup>
     <None Remove="images\dance1.gif" />
+    <None Remove="music\rave.mp3" />
     <None Remove="music\tetris.mp3" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="music\rave.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="music\tetris.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

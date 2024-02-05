@@ -185,11 +185,18 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
         private void btnOrdenar_Click(object sender, RoutedEventArgs e)
         {
             // no se si funcionara esta tonteria (funciona lol)
-            mediaPlayer.Open(new Uri("music/tetris.mp3", UriKind.Relative));
-            mediaPlayer.Play();
-
-
             string metodoSeleccionado = (cbOrdenacion.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            if (metodoSeleccionado == "Cocktail sort")
+            {
+                mediaPlayer.Open(new Uri("music/rave.mp3", UriKind.Relative));
+                mediaPlayer.Play();
+            }
+            else
+            {
+                mediaPlayer.Open(new Uri("music/tetris.mp3", UriKind.Relative));
+                mediaPlayer.Play();
+            }
             switch (metodoSeleccionado)
             {
                 case "Bubble sort":
