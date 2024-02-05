@@ -28,7 +28,7 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
         private int[] elementos;
         private int delay;
         private MediaPlayer mediaPlayer = new MediaPlayer();
-        private double tamañoCiculito = 15; // aqui ajusto el tamaño del circulito
+        private double tamañoCiculito = 35; // aqui ajusto el tamaño del circulito
         private bool isMuted = false;
 
         // meter 4 pincells (solid color brush)
@@ -211,32 +211,63 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
             mediaPlayer.Stop();
         }
 
+        private string GetSelectedEasingFunction()
+        {
+            if (cbFuncioEasing.SelectedItem is ComboBoxItem selectedItem)
+            {
+                return selectedItem.Content.ToString();
+            }
+            else
+            {
+                return "Lineal"; // el de FOL
+            }
+        }
+
+        private IEasingFunction GetEasingFunction(string easingFunctionName)
+        {
+            switch (easingFunctionName)
+            {
+                case "EaseInOut":
+                    return new PowerEase { EasingMode = EasingMode.EaseInOut };
+                case "EaseIn":
+                    return new PowerEase { EasingMode = EasingMode.EaseIn };
+                case "EaseOut":
+                    return new PowerEase { EasingMode = EasingMode.EaseOut };
+                case "Lineal":
+                    return null; // Sin función de easing para una animación lineal
+                case "BounceEase":
+                    return new BounceEase();
+                default:
+                    return null; // O cualquier otro valor por defecto
+            }
+        }
+
         private void IntercambiarFiguras(int index1, int index2)
         {
             DependencyProperty propDeLaAnimacion;
             var tipoDeAnimacion = cbTipusAnimacio.Text;
-
+            var nombreDeLaFuncionEasingSeleccionada = GetSelectedEasingFunction();
 
             var figura1 = cvCanvas.Children[index1] as Shape;
             var figura2 = cvCanvas.Children[index2] as Shape;
 
             // calculamos las nuevas posiciones basadas en el ancho del canvas y el número de elementos
-            var nuevaPosX1 = index2 * (cvCanvas.ActualWidth / elementos.Length);
-            var nuevaPosX2 = index1 * (cvCanvas.ActualWidth / elementos.Length);
-            double posicion1;
-            double posicion2;
+            var nuevaPosision1 = index2 * (cvCanvas.ActualWidth / elementos.Length);
+            var nuevaPosicion2 = index1 * (cvCanvas.ActualWidth / elementos.Length);
+            double primeraPosicion;
+            double segundaPosicion;
 
             // para que la animacion sea vertical o de lado
             if (tipoDeAnimacion == "Vertical")
             {
-                posicion1 = Canvas.GetTop(cvCanvas.Children[index1]);
-                posicion2 = Canvas.GetTop(cvCanvas.Children[index2]);
+                primeraPosicion = Canvas.GetTop(cvCanvas.Children[index1]);
+                segundaPosicion = Canvas.GetTop(cvCanvas.Children[index2]);
                 propDeLaAnimacion = Canvas.TopProperty;
             }
             else
             {
-                posicion1 = Canvas.GetLeft(cvCanvas.Children[index1]);
-                posicion2 = Canvas.GetLeft(cvCanvas.Children[index2]);
+                primeraPosicion = Canvas.GetLeft(cvCanvas.Children[index1]);
+                segundaPosicion = Canvas.GetLeft(cvCanvas.Children[index2]);
                 propDeLaAnimacion = Canvas.LeftProperty;
             }
 
@@ -244,17 +275,19 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
             // Prepara las animaciones
             DoubleAnimation animacion1 = new DoubleAnimation
             {
-                From = posicion1,
-                To = nuevaPosX1,
+                From = primeraPosicion,
+                To = nuevaPosision1,
                 Duration = TimeSpan.FromMilliseconds(delay),
+                EasingFunction = GetEasingFunction(nombreDeLaFuncionEasingSeleccionada),
                 FillBehavior = FillBehavior.Stop
             };
 
             DoubleAnimation animacion2 = new DoubleAnimation
             {
-                From = posicion2,
-                To = nuevaPosX2,
+                From = segundaPosicion,
+                To = nuevaPosicion2,
                 Duration = TimeSpan.FromMilliseconds(delay),
+                EasingFunction = GetEasingFunction(nombreDeLaFuncionEasingSeleccionada),
                 FillBehavior = FillBehavior.Stop
             };            
             

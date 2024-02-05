@@ -105,11 +105,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Label Content="Funció d'Easing" Width="125"/>
                             <ComboBox Name="cbFuncioEasing" Width="130">
-                                <ComboBoxItem Content="EaseInOut"/>
-                                <ComboBoxItem Content="EaseIn"/>
-                                <ComboBoxItem Content="EaseOut"/>
-                                <ComboBoxItem Content="Lineal"/>
-                                <!-- Añade más funciones si es necesario -->
+                                <ComboBoxItem Content="Apruebame, porfa :D"/>
                             </ComboBox>
                         </StackPanel>
 
@@ -121,7 +117,7 @@
                                 <ComboBoxItem Content="EaseIn"/>
                                 <ComboBoxItem Content="EaseOut"/>
                                 <ComboBoxItem Content="Lineal"/>
-                                <!-- Añade más modos si es necesario -->
+                                <ComboBoxItem Content="BounceEase"/>
                             </ComboBox>
                         </StackPanel>
                     </StackPanel>
