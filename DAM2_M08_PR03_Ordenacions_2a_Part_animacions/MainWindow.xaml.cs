@@ -215,23 +215,37 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
         {
 
             // Obtiene las figuras por su índice
-            DependencyProperty propertyToAnimate;
+            DependencyProperty propDeLaAnimacion;
+            var tipoDeAnimacion = cbTipusAnimacio.Text;
+
 
             var figura1 = cvCanvas.Children[index1] as Shape;
             var figura2 = cvCanvas.Children[index2] as Shape;
 
             // Calcula las nuevas posiciones basadas en el ancho del canvas y el número de elementos
-            double nuevaPosX1 = index2 * (cvCanvas.ActualWidth / elementos.Length);
-            double nuevaPosX2 = index1 * (cvCanvas.ActualWidth / elementos.Length);
+            var nuevaPosX1 = index2 * (cvCanvas.ActualWidth / elementos.Length);
+            var nuevaPosX2 = index1 * (cvCanvas.ActualWidth / elementos.Length);
+            double posicion1;
+            double posicion2;
 
-            double fromA = Canvas.GetLeft(cvCanvas.Children[index1]);
-            double fromB = Canvas.GetLeft(cvCanvas.Children[index2]);
-            propertyToAnimate = Canvas.LeftProperty;
+            if (tipoDeAnimacion == "Vertical")
+            {
+                posicion1 = Canvas.GetTop(cvCanvas.Children[index1]);
+                posicion2 = Canvas.GetTop(cvCanvas.Children[index2]);
+                propDeLaAnimacion = Canvas.TopProperty;
+            }
+            else
+            {
+                posicion1 = Canvas.GetLeft(cvCanvas.Children[index1]);
+                posicion2 = Canvas.GetLeft(cvCanvas.Children[index2]);
+                propDeLaAnimacion = Canvas.LeftProperty;
+            }
+
 
             // Prepara las animaciones
             DoubleAnimation animacion1 = new DoubleAnimation
             {
-                From = fromA,
+                From = posicion1,
                 To = nuevaPosX1,
                 Duration = TimeSpan.FromMilliseconds(delay),
                 FillBehavior = FillBehavior.Stop
@@ -239,7 +253,7 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
 
             DoubleAnimation animacion2 = new DoubleAnimation
             {
-                From = fromB,
+                From = posicion2,
                 To = nuevaPosX2,
                 Duration = TimeSpan.FromMilliseconds(delay),
                 FillBehavior = FillBehavior.Stop
@@ -254,8 +268,8 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
                 Canvas.SetZIndex(cvCanvas.Children[index2], 0);
             };
 
-            cvCanvas.Children[index1].BeginAnimation(propertyToAnimate, animacion1);
-            cvCanvas.Children[index2].BeginAnimation(propertyToAnimate, animacion2);
+            cvCanvas.Children[index1].BeginAnimation(propDeLaAnimacion, animacion1);
+            cvCanvas.Children[index2].BeginAnimation(propDeLaAnimacion, animacion2);
 
             Canvas.SetZIndex(cvCanvas.Children[index1], 1);
             Canvas.SetZIndex(cvCanvas.Children[index2], 1);
