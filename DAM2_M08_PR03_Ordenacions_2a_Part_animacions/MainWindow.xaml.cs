@@ -427,11 +427,6 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
                     if (elementos[j] > elementos[j + 1])
                     {
                         IntercambiarFiguras(j, j + 1);
-                        //cvCanvas.UpdateLayout();
-
-                        // Este es mi primer intento con mi primer sorting algorithm,
-                        // probamos dandole un delay segun selecciones el usuario
-                        //await Task.Delay(delay);
 
                         // un breve retraso
                         Retraso(delay);
@@ -457,45 +452,6 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
                 {
                     IntercambiarFiguras(i, minIndex);
                 }
-            }
-        }
-        private void CountingSort()
-        {
-            int RANGE = elementos.Max() + 1; // Asegúrate de que el rango cubra todos los valores posibles
-            int[] count = new int[RANGE];
-            int[] output = new int[elementos.Length];
-
-            // Inicializa el array de conteo
-            for (int i = 0; i < RANGE; ++i)
-            {
-                count[i] = 0;
-            }
-
-            // Almacena el conteo de cada elemento
-            for (int i = 0; i < elementos.Length; ++i)
-            {
-                ++count[elementos[i]];
-            }
-
-            // Cambia count[i] para que contenga la posición actual en output de este elemento
-            for (int i = 1; i < RANGE; ++i)
-            {
-                count[i] += count[i - 1];
-            }
-
-            // Construye el array de salida
-            for (int i = elementos.Length - 1; i >= 0; i--)
-            {
-                output[count[elementos[i]] - 1] = elementos[i];
-                --count[elementos[i]];
-            }
-
-            // Copia los elementos a elementos[]
-            for (int i = 0; i < elementos.Length; ++i)
-            {
-                int indexAnterior = Array.IndexOf(elementos, output[i]);
-                elementos[i] = output[i];
-                IntercambiarFiguras(i, indexAnterior);
             }
         }
 

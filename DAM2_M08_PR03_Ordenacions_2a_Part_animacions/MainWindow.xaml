@@ -96,7 +96,7 @@
                             <Label Content="Tipus d'animació" Width="125"/>
                             <ComboBox Name="cbTipusAnimacio" Width="130">
                                 <ComboBoxItem Content="Desplaçaments"/>
-                                <ComboBoxItem Content="Un altre tipus"/>
+                                <ComboBoxItem Content="Vertical"/>
                                 <!-- Añade más tipos si es necesario -->
                             </ComboBox>
                         </StackPanel>
