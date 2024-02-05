@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -197,10 +198,13 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
                     SelectionSort();
                     break;
                 case "Insertion sort":
-                    InsertionSort();
+                    //InsertionSort();
                     break;
                 case "Counting sort":
                     CountingSort();
+                    break;
+                case "Heap sort":
+                    HeapSort();
                     break;
             }
             mediaPlayer.Stop();
@@ -208,10 +212,10 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
 
         private void IntercambiarFiguras(int index1, int index2)
         {
-            // Asegúrate de que los índices son válidos
-            if (index1 < 0 || index1 >= cvCanvas.Children.Count || index2 < 0 || index2 >= cvCanvas.Children.Count) return;
 
             // Obtiene las figuras por su índice
+            DependencyProperty propertyToAnimate;
+
             var figura1 = cvCanvas.Children[index1] as Shape;
             var figura2 = cvCanvas.Children[index2] as Shape;
 
@@ -219,43 +223,55 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
             double nuevaPosX1 = index2 * (cvCanvas.ActualWidth / elementos.Length);
             double nuevaPosX2 = index1 * (cvCanvas.ActualWidth / elementos.Length);
 
+            double fromA = Canvas.GetLeft(cvCanvas.Children[index1]);
+            double fromB = Canvas.GetLeft(cvCanvas.Children[index2]);
+            propertyToAnimate = Canvas.LeftProperty;
+
             // Prepara las animaciones
             DoubleAnimation animacion1 = new DoubleAnimation
             {
-                To = nuevaPosX2,
-                Duration = TimeSpan.FromMilliseconds(2)
+                From = fromA,
+                To = nuevaPosX1,
+                Duration = TimeSpan.FromMilliseconds(delay),
+                FillBehavior = FillBehavior.Stop
             };
 
             DoubleAnimation animacion2 = new DoubleAnimation
             {
-                To = nuevaPosX1,
-                Duration = TimeSpan.FromMilliseconds(2)
+                From = fromB,
+                To = nuevaPosX2,
+                Duration = TimeSpan.FromMilliseconds(delay),
+                FillBehavior = FillBehavior.Stop
+            };            
+            
+            CambiarColorFiguraTemporal(index1);
+            CambiarColorFiguraTemporal(index2);
+
+            animacion1.Completed += (sender, e) =>
+            {
+                Canvas.SetZIndex(cvCanvas.Children[index1], 0);
+                Canvas.SetZIndex(cvCanvas.Children[index2], 0);
             };
 
-            // Cambia los colores de las figuras a scbIntercambio antes de iniciar la animación
-            if (figura1 != null && figura2 != null)
-            {
-                figura1.Fill = scbIntercambio;
-                figura2.Fill = scbIntercambio;
+            cvCanvas.Children[index1].BeginAnimation(propertyToAnimate, animacion1);
+            cvCanvas.Children[index2].BeginAnimation(propertyToAnimate, animacion2);
 
-                // Inicia las animaciones
-                figura1.BeginAnimation(Canvas.LeftProperty, animacion1);
-                figura2.BeginAnimation(Canvas.LeftProperty, animacion2);
+            Canvas.SetZIndex(cvCanvas.Children[index1], 1);
+            Canvas.SetZIndex(cvCanvas.Children[index2], 1);
 
-                // Espera a que la animación termine
-                Retraso(delay);
+            // lo que me dijo Xevi, el delay antes de actualizar
+            Retraso(delay);
 
-                // Intercambia los elementos en el arreglo 'elementos'
-                int temp = elementos[index1];
-                elementos[index1] = elementos[index2];
-                elementos[index2] = temp;
+            // Intercambia los elementos en el arreglo 'elementos'
+            int temp = elementos[index1];
+            elementos[index1] = elementos[index2];
+            elementos[index2] = temp;
 
-                // Restablece los colores originales y actualiza la altura si es necesario
-                ActualizarColorFigura(index1);
-                ActualizarColorFigura(index2);
-                ActualizarAlturaFigura(index1, elementos[index1]);
-                ActualizarAlturaFigura(index2, elementos[index2]);
-            }
+            // Restablece los colores originales y actualiza la altura si es necesario
+            ActualizarColorFigura(index1);
+            ActualizarColorFigura(index2);
+            ActualizarAlturaFigura(index1, elementos[index1]);
+            ActualizarAlturaFigura(index2, elementos[index2]);
         }
 
 
@@ -443,23 +459,23 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
             }
         }
 
-        private void InsertionSort()
-        {
-            int n = elementos.Length;
-            for (int i = 1; i < n; i++)
-            {
-                int key = elementos[i];
-                int j = i - 1;
+        //private void InsertionSort()
+        //{
+        //    int n = elementos.Length;
+        //    for (int i = 1; i < n; i++)
+        //    {
+        //        int key = elementos[i];
+        //        int j = i - 1;
 
-                while (j >= 0 && elementos[j] > key)
-                {
-                    elementos[j + 1] = elementos[j];
-                    IntercambiarFiguras(j, j + 1);
-                    j = j - 1;
-                }
-                elementos[j + 1] = key;
-            }
-        }
+        //        while (j >= 0 && elementos[j] > key)
+        //        {
+        //            elementos[j + 1] = elementos[j];
+        //            IntercambiarFiguras(j, j + 1);
+        //            j = j - 1;
+        //        }
+        //        elementos[j + 1] = key;
+        //    }
+        //}
 
         // Deprecated
         private void CountingSort()
@@ -501,6 +517,49 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
                 IntercambiarFiguras(i, indexAnterior);
             }
         }
+
+        private void HeapSort()
+        {
+            int n = elementos.Length;
+
+            // Construir el heap (reorganizar el array)
+            for (int i = n / 2 - 1; i >= 0; i--)
+                Heapify(n, i);
+
+            // Extraer elementos uno por uno del heap
+            for (int i = n - 1; i >= 0; i--)
+            {
+                // Mover la raíz actual al final
+                IntercambiarFiguras(0, i);
+
+                // Llamar a Heapify en el heap reducido
+                Heapify(i, 0);
+            }
+        }
+
+        private void Heapify(int n, int i)
+        {
+            int largest = i; // Inicializar el más grande como raíz
+            int l = 2 * i + 1; // izquierda = 2*i + 1
+            int r = 2 * i + 2; // derecha = 2*i + 2
+
+            // Si el hijo izquierdo es más grande que la raíz
+            if (l < n && elementos[l] > elementos[largest])
+                largest = l;
+
+            // Si el hijo derecho es más grande que el más grande hasta ahora
+            if (r < n && elementos[r] > elementos[largest])
+                largest = r;
+
+            // Si el más grande no es la raíz
+            if (largest != i)
+            {
+                IntercambiarFiguras(i, largest);
+                // Recursivamente heapify el subárbol afectado
+                Heapify(n, largest);
+            }
+        }
+
 
         ////////////////////// MUSIC ///////////////////////// 
 
