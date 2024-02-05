@@ -213,7 +213,7 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
 
         private string GetSelectedEasingFunction()
         {
-            if (cbFuncioEasing.SelectedItem is ComboBoxItem selectedItem)
+            if (cbEasingMode.SelectedItem is ComboBoxItem selectedItem)
             {
                 return selectedItem.Content.ToString();
             }
