@@ -28,7 +28,7 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
         private int[] elementos;
         private int delay;
         private MediaPlayer mediaPlayer = new MediaPlayer();
-        private double tamañoCiculito = 35; // aqui ajusto el tamaño del circulito
+        private double tamañoCiculito = 50; // aqui ajusto el tamaño del circulito
         private bool isMuted = false;
 
         // meter 4 pincells (solid color brush)
@@ -234,16 +234,18 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
                 case "EaseOut":
                     return new PowerEase { EasingMode = EasingMode.EaseOut };
                 case "Lineal":
-                    return null; // Sin función de easing para una animación lineal
+                    return null; // ya por defecto lo es
                 case "BounceEase":
                     return new BounceEase();
                 default:
-                    return null; // O cualquier otro valor por defecto
+                    return null; 
             }
         }
 
         private void IntercambiarFiguras(int index1, int index2)
         {
+            // AQUI HAGO TODO RELACIONADO CON LAS ANIMACIONES:
+
             DependencyProperty propDeLaAnimacion;
             var tipoDeAnimacion = cbTipusAnimacio.Text;
             var nombreDeLaFuncionEasingSeleccionada = GetSelectedEasingFunction();
@@ -411,6 +413,10 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
             // buscamos el elemento máximo 
             int valorMaximo = elementos.Any() ? elementos.Max() : 1; // Evitamos la división por cero
 
+            // Limita el tamaño máximo de las figuras para asegurar que no se salgan del Canvas
+            double tamañoElementoMaximo = 50; // Define el tamaño máximo que deseas para las figuras
+            double tamañoElemento = Math.Min(espacioEntreFiguras * 0.8, tamañoElementoMaximo); // Usa un porcentaje del espacio para dejar margen
+
             // cogemos los colores de los ColorPickels
             Color colorCorrecto = this.colorCorrecte.SelectedColor ?? Colors.Green;
             Color colorIncorrecto = this.colorIncorrecter.SelectedColor ?? Colors.Red;
@@ -428,8 +434,10 @@ namespace DAM2_M08_PR03_Ordenacions_2a_Part_animacions
                     // pintamos círculos (elipses)
                     Ellipse circulo = new Ellipse
                     {
-                        Width = tamañoCiculito,
-                        Height = tamañoCiculito,
+                        Width = tamañoElemento,
+                        Height = tamañoElemento,
+                        Stroke = new SolidColorBrush(Colors.Black),
+                        StrokeThickness = iudGrosor.Value ?? 0,
                         Fill = elementos[i] == elementosOrdenados[i]
                             ? scbCorrecte
                             : scbIncorrecte // con esto estara de color correcto o incorrectto
